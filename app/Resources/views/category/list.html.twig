@@ -1,16 +1,32 @@
 {% extends "show/base.html.twig" %}
 
-{% block title %}
-    Create new show
-{% endblock %}
+
+{% block title %}List of shows{% endblock %}
 
 {% block content %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-    </div>
-{% endblock %}
 
+    <div class="card mb-4">
+    {% for category in list_categories %}
+    <!-- Blog Post -->
+        <div>
+            {{ category.getName() }}
+        </div>
+    {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center mb-4">
+        <li class="page-item">
+            <a class="page-link" href="#">&larr; Older</a>
+        </li>
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Newer &rarr;</a>
+        </li>
+    </ul>
+        <!-- /.row -->
+    </div>
+
+{% endblock %}
 
  {% block search %}
      <!-- Sidebar Widgets Column -->
@@ -29,7 +45,7 @@
              </div>
          </div>
 
-         {{ render(controller("AppBundle\\Controller\\ShowController::categoriesAction")) }}
+        {{ render(controller("AppBundle\\Controller\\ShowController::categoriesAction")) }}
 
          <!-- Side Widget -->
          <div class="card my-4">

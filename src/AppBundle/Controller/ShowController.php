@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -58,7 +59,6 @@ class ShowController extends Controller
             $show->setPathMainPicture($fileName);
 
 
-            // for example, if Task is a Doctrine entity, save it!
             $em = $this->getDoctrine()->getManager();
             $em->persist($show);
             $em->flush();
@@ -82,8 +82,12 @@ class ShowController extends Controller
 
 
     public function categoriesAction() {
+        $repository = $this->getDoctrine()->getRepository(Category::class);
+
+        $categories = $repository->findAll();
+
         return $this->render('show/categories.html.twig', [
-            'categories' => ['Web design', 'HTML', 'Freebies', 'Javascript', 'CSS', 'Tutorials']
+            'categories' => $categories
         ]);
     }
 }
