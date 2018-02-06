@@ -17,9 +17,11 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="card-footer text-muted">
+            <div class="card-footer text-muted d-flex flex-column">
                 Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
                 <a href="#">{{ show.getAuthor() }}</a>
+
+                <a href="/show/{{ show.getId() }}" class="btn align-self-end btn-outline-dark">Voir</a>
             </div>
         </div>
     {% else %}

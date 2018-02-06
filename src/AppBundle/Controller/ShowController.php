@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
+use AppBundle\Service\FileUploader;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,9 +34,53 @@ class ShowController extends Controller
     }
 
     /**
+     * @Route("/{id}", requirements={"page"="\d+"})
+     */
+    public function viewAction($id) {
+        $show = $this->getDoctrine()->getRepository(Show::class)->find($id);
+        return $this->render('show/view.html.twig', [
+            'show' => $show
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/update", requirements={"page"="\d+"})
+     */
+    public function updateAction(Request $request, $id) {
+        $show = $this->getDoctrine()->getRepository(Show::class)->find($id);
+
+        if(!$show) {
+            throw $this->createNotFoundException(
+                'No products found for '.$id
+            );
+        }
+        $form = $this->createForm(ShowType::class);
+        $form->setData($show);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $show = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($show);
+            $em->flush();
+
+            return $this->redirectToRoute('list_show');
+        }
+
+        return $this->render('show/update.html.twig', [
+            'form' => $form->createView(),
+            'show' => $show
+        ]);
+    }
+
+    /**
      * @Route("/create", name="create_show")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request, FileUploader $fileUploader) {
 
         $form = $this->createForm(ShowType::class);
 
@@ -46,17 +91,6 @@ class ShowController extends Controller
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $show = $form->getData();
-
-            $file = $show->getPathMainPicture();
-
-            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-            // Move the file to the directory where brochures are stored
-            $file->move(
-                $this->getParameter('picture_show_directory'),
-                $fileName
-            );
-            $show->setPathMainPicture($fileName);
 
 
             $em = $this->getDoctrine()->getManager();
