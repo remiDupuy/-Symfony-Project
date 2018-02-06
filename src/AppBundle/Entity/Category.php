@@ -5,12 +5,14 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Category
  *
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @UniqueEntity("name")
  */
 class Category
 {

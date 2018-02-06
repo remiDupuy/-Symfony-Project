@@ -30,6 +30,10 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    AppBundle\Twig\AppExtension:
+        class: AppBundle\Twig\AppExtension
+        tags: ['twig.extension']
+
     AppBundle\Service\FileUploader:
             arguments:
                 $targetDir: '%picture_show_directory%'

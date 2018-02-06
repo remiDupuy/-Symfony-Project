@@ -34,7 +34,7 @@ class ShowController extends Controller
     }
 
     /**
-     * @Route("/{id}", requirements={"page"="\d+"})
+     * @Route("/{id}", requirements={"id"="\d+"})
      */
     public function viewAction($id) {
         $show = $this->getDoctrine()->getRepository(Show::class)->find($id);
@@ -44,7 +44,7 @@ class ShowController extends Controller
     }
 
     /**
-     * @Route("/{id}/update", requirements={"page"="\d+"})
+     * @Route("/{id}/update", requirements={"id"="\d+"})
      */
     public function updateAction(Request $request, $id) {
         $show = $this->getDoctrine()->getRepository(Show::class)->find($id);
@@ -59,48 +59,78 @@ class ShowController extends Controller
 
         $form->handleRequest($request);
 
+        $errors = [];
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
-            $show = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->merge($show);
-            $em->flush();
+            $validator = $this->get('validator');
+            $errors = $validator->validate($form->getData());
 
-            return $this->redirectToRoute('list_show');
+            if(!count($errors)) {
+                $show = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->merge($show);
+                $em->flush();
+
+                $this->addFlash(
+                    'success',
+                    'Show updated'
+                );
+
+                return $this->redirectToRoute('list_show');
+            }
+
         }
 
         return $this->render('show/update.html.twig', [
             'form' => $form->createView(),
-            'show' => $show
+            'show' => $show,
+            'errors' => $errors
         ]);
     }
 
     /**
      * @Route("/create", name="create_show")
      */
-    public function createAction(Request $request, FileUploader $fileUploader) {
+    public function createAction(Request $request) {
 
         $form = $this->createForm(ShowType::class);
 
 
         $form->handleRequest($request);
 
+        $errors = [];
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
-            $show = $form->getData();
+
+            $validator = $this->get('validator');
+            $errors = $validator->validate($form->getData());
+
+            if(!count($errors)) {
+
+                $show = $form->getData();
 
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($show);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($show);
+                $em->flush();
 
-            return $this->redirectToRoute('list_show');
+                $this->addFlash(
+                    'success',
+                    'Show created'
+                );
+
+                return $this->redirectToRoute('list_show');
+            }
         }
 
-        return $this->render('show/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('show/create.html.twig', [
+            'form' => $form->createView(),
+            'errors' => $errors
+        ]);
 
     }
 

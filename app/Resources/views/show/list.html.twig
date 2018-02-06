@@ -1,6 +1,5 @@
 {% extends "show/base.html.twig" %}
 
-
 {% block title %}List of shows{% endblock %}
 
 {% block content %}
@@ -8,10 +7,11 @@
     {% for show in list_shows %}
         <!-- Blog Post -->
         <div class="card mb-4">
-            <img class="card-img-top" src="{{ asset('uploads/picture_show/'~show.getPathMainPicture()) }}" alt="Card image cap">
+            <img class="card-img-top" src="{{ asset('uploads/picture_show/'~show.getPathMainPicture().filename) }}" alt="Card image cap">
             <div class="card-body">
                 <h2 class="card-title">{{ show.getName() }}</h2>
                 <div class="categories">
+                    {{ joinColumn(show.getCategories, 'name') }}
                     {% for category in show.getCategories() %}
                         {{ category.getName() }},
                     {% endfor %}
@@ -19,7 +19,7 @@
             </div>
             <div class="card-footer text-muted d-flex flex-column">
                 Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
-                <a href="#">{{ show.getAuthor() }}</a>
+                <div>{{ show.getAuthor() }}</div>
 
                 <a href="/show/{{ show.getId() }}" class="btn align-self-end btn-outline-dark">Voir</a>
             </div>
