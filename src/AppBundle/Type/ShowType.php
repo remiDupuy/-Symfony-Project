@@ -8,6 +8,7 @@
 namespace AppBundle\Type;
 
 use AppBundle\Entity\Show;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -28,6 +29,15 @@ class ShowType extends AbstractType {
             ->add('iso_country', CountryType::class)
             ->add('path_main_picture', FileType::class)
             ->add('published_date', DateType::class)
+            ->add('categories', EntityType::class, array(
+                // query choices from this entity
+                'class' => 'AppBundle:Category',
+
+                // use the User.username property as the visible option string
+                'choice_label' => 'name',
+
+            // used to render a select box, check boxes or radios
+                'multiple' => true))
             ->add('save', SubmitType::class, array('label' => 'Create show'));
     }
 

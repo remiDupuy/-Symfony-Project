@@ -9,6 +9,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -51,6 +53,29 @@ class Show
      * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $path_main_picture;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection|Category[]
+     *
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="shows")
+     * @ORM\JoinTable(
+     *  name="categories_shows",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="show_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *  }
+     * )
+     */
+    private $categories;
+
+
+
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -148,6 +173,23 @@ class Show
     {
         $this->path_main_picture = $path_main_picture;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param mixed $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+    }
+
 
 
 
