@@ -54,6 +54,8 @@ class ShowController extends Controller
                 'No products found for '.$id
             );
         }
+
+        /* Keep main_picture name */
         $picture = $show->getPathMainPicture()->getFilename();
 
         $form = $this->createForm(ShowType::class, $show);
@@ -61,6 +63,7 @@ class ShowController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            /* If picture not change, populate path picture with old picture */
             if(!$show->getPathMainPicture()) {
                 $show->setPathMainPicture($picture);
             }
