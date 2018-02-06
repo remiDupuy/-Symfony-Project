@@ -7,6 +7,7 @@
  */
 namespace AppBundle\Type;
 
+use AppBundle\Entity\Show;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -14,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShowType extends AbstractType {
 
@@ -23,10 +25,17 @@ class ShowType extends AbstractType {
         $builder->add('name', TextType::class)
             ->add('author', TextType::class)
             ->add('published_date', DateType::class)
-            ->add('country', CountryType::class)
-            ->add('mainPicture', FileType::class, array('required' => false))
+            ->add('iso_country', CountryType::class)
+            ->add('path_main_picture', FileType::class)
             ->add('published_date', DateType::class)
             ->add('save', SubmitType::class, array('label' => 'Create show'));
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Show::class
+        ]);
     }
 
 }

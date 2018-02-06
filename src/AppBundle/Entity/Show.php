@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -16,6 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Show
 {
+    public static $IMAGE_DIR = 'uploads/picture_show';
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -45,6 +48,7 @@ class Show
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $path_main_picture;
 
