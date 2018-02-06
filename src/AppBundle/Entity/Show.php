@@ -30,21 +30,25 @@ class Show
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $author;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank()
      */
     private $published_date;
 
     /**
      * @ORM\Column(type="string", length=2)
+     * @Assert\NotBlank()
      */
     private $iso_country;
 
