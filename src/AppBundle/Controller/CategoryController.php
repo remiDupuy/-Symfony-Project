@@ -53,4 +53,17 @@ class CategoryController extends Controller
             ]);
     }
 
+    /**
+     * @Route("/{id}")
+     */
+    public function viewAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $category = $em->find('AppBundle\Entity\Category', $id);
+        
+        return $this->render('show/list.html.twig', [
+            'list_shows' => $category->getShows()
+        ]);
+    }
+
 }

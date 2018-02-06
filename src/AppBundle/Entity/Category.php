@@ -32,7 +32,7 @@ class Category
     /**
      * @var \Doctrine\Common\Collections\Collection|Show[]
      *
-     * @ORM\ManyToMany(targetEntity="Category", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Show", mappedBy="categories")
      */
     private $shows;
 

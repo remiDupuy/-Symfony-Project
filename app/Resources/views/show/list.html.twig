@@ -6,22 +6,24 @@
 {% block content %}
 
     {% for show in list_shows %}
-    <!-- Blog Post -->
-    <div class="card mb-4">
-        <img class="card-img-top" src="{{ asset('uploads/picture_show/'~show.getPathMainPicture()) }}" alt="Card image cap">
-        <div class="card-body">
-            <h2 class="card-title">{{ show.getName() }}</h2>
-            <div class="categories">
-                {% for category in show.getCategories() %}
-                    {{ category.getName() }},
-                {% endfor %}
+        <!-- Blog Post -->
+        <div class="card mb-4">
+            <img class="card-img-top" src="{{ asset('uploads/picture_show/'~show.getPathMainPicture()) }}" alt="Card image cap">
+            <div class="card-body">
+                <h2 class="card-title">{{ show.getName() }}</h2>
+                <div class="categories">
+                    {% for category in show.getCategories() %}
+                        {{ category.getName() }},
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
+                <a href="#">{{ show.getAuthor() }}</a>
             </div>
         </div>
-        <div class="card-footer text-muted">
-            Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
-            <a href="#">{{ show.getAuthor() }}</a>
-        </div>
-    </div>
+    {% else %}
+        <div>No shows availables</div>
     {% endfor %}
 
     <!-- Pagination -->
