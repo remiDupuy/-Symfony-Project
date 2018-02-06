@@ -54,40 +54,35 @@ class ShowController extends Controller
                 'No products found for '.$id
             );
         }
-        $form = $this->createForm(ShowType::class);
-        $form->setData($show);
+        $picture = $show->getPathMainPicture()->getFilename();
 
+        $form = $this->createForm(ShowType::class, $show);
         $form->handleRequest($request);
 
-        $errors = [];
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
 
-            $validator = $this->get('validator');
-            $errors = $validator->validate($form->getData());
-
-            if(!count($errors)) {
-                $show = $form->getData();
-
-                $em = $this->getDoctrine()->getManager();
-                $em->merge($show);
-                $em->flush();
-
-                $this->addFlash(
-                    'success',
-                    'Show updated'
-                );
-
-                return $this->redirectToRoute('list_show');
+            if(!$show->getPathMainPicture()) {
+                $show->setPathMainPicture($picture);
             }
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($show);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Show updated'
+            );
+
+            return $this->redirectToRoute('list_show');
+
 
         }
 
         return $this->render('show/update.html.twig', [
             'form' => $form->createView(),
             'show' => $show,
-            'errors' => $errors
         ]);
     }
 
@@ -96,40 +91,28 @@ class ShowController extends Controller
      */
     public function createAction(Request $request) {
 
-        $form = $this->createForm(ShowType::class);
+        $show = new Show();
+        $form = $this->createForm(ShowType::class, $show);
 
 
         $form->handleRequest($request);
 
-        $errors = [];
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
+        if ($form->isValid()) {
 
-            $validator = $this->get('validator');
-            $errors = $validator->validate($form->getData());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($show);
+            $em->flush();
 
-            if(!count($errors)) {
+            $this->addFlash(
+                'success',
+                'Show created'
+            );
 
-                $show = $form->getData();
-
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($show);
-                $em->flush();
-
-                $this->addFlash(
-                    'success',
-                    'Show created'
-                );
-
-                return $this->redirectToRoute('list_show');
-            }
+            return $this->redirectToRoute('list_show');
         }
 
         return $this->render('show/create.html.twig', [
-            'form' => $form->createView(),
-            'errors' => $errors
+            'form' => $form->createView()
         ]);
 
     }
