@@ -32,7 +32,6 @@ class ShowController extends Controller
      */
     public function createAction(Request $request) {
 
-
         $form = $this->createForm(ShowType::class);
 
 
@@ -41,7 +40,13 @@ class ShowController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
-            $show = $form->getData();
+            $show_datas = $form->getData();
+
+            $show = new Show();
+            $show->setName($show_datas['name']);
+            $show->setAuthor($show_datas['author']);
+            $show->setPublishedDate($show_datas['published_date']);
+            $show->setIsoCountry($show_datas['country']);
 
             // for example, if Task is a Doctrine entity, save it!
             $em = $this->getDoctrine()->getManager();

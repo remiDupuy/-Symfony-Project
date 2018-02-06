@@ -39,6 +39,16 @@ class Show
     private $published_date;
 
     /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $iso_country;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path_main_picture;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -101,6 +111,41 @@ class Show
     {
         $this->published_date = $published_date;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getIsoCountry()
+    {
+        return $this->iso_country;
+    }
+
+    /**
+     * @param mixed $iso_country
+     */
+    public function setIsoCountry($iso_country)
+    {
+        $this->iso_country = $iso_country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathMainPicture()
+    {
+        return $this->path_main_picture;
+    }
+
+    /**
+     * @param mixed $path_main_picture
+     */
+    public function setPathMainPicture($path_main_picture)
+    {
+        $this->path_main_picture = $path_main_picture;
+    }
+
+
 
 
 }
