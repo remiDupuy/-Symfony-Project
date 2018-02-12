@@ -43,6 +43,13 @@ services:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
                 - { name: doctrine.event_listener, event: postLoad }
+
+    AppBundle\ShowFinder\DbShowFinder:
+            tags: ['show.finder']
+            arguments: ['@doctrine.orm.entity_manager']
+
+    AppBundle\ShowFinder\OMDBShowFinder:
+            tags: ['show.finder']
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
+use AppBundle\ShowFinder\ShowFinder;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -22,15 +23,15 @@ class ShowController extends Controller
     /**
      * @Route("/", name="list_show")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, ShowFinder $showFinder)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Show');
 
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Show');
         $sessions = $request->getSession();
 
         if($sessions->has('query_search_value')) {
             $query = $sessions->get('query_search_value');
-            $shows = $repository->findAllByQuery($query);
+            $shows = $showFinder->searchByName($query);
 
             $sessions->remove('query_search_value');
         } else {

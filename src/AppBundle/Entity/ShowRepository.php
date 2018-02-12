@@ -15,10 +15,10 @@ class ShowRepository extends EntityRepository
     public function findAllByQuery($query)
     {
         return $this->createQueryBuilder('s')
-            ->where('LOWER(s.name) LIKE :query')
+            ->where('LOWER(s.name) LIKE LOWER(:query)')
             ->setParameter('query', '%' . $query . '%')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+
     }
 }
