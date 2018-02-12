@@ -124,7 +124,7 @@ class ShowController extends Controller
             );
         }
 
-        $csrf = new CsrfToken('delete_show', $request->get('_csrf_tokenw'));
+        $csrf = new CsrfToken('delete_show', $request->get('_csrf_token'));
         if(!$csrfTokenManager->isTokenValid($csrf)) {
 
             $this->addFlash('danger', 'The csrf token is not valid.');
