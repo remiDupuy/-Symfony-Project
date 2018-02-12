@@ -15,5 +15,9 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
+    omdb:
+      endpoint: http://www.omdbapi.com/
+      api_key: 118f043f
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

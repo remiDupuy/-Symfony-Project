@@ -7,6 +7,10 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    omdb:
+      endpoint: http://www.omdbapi.com/
+      api_key: 118f043f
+
 
 framework:
     #esi: ~

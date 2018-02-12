@@ -15,7 +15,8 @@ class DbShowFinder implements ShowFinderInterface
 
     public function findByName($query)
     {
-        return $this->em->getRepository(Show::class);
+        $repo_show = $this->em->getRepository(Show::class);
+        return $repo_show->findAllByQuery($query);
     }
 
     public function getName()

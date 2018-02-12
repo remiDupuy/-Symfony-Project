@@ -49,6 +49,7 @@ class ShowFinder
             $results[$finder->getName()] = $finder->findByName($query);
         }
 
+        dump($results); die;
         return $results;
     }
 
