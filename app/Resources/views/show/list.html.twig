@@ -23,6 +23,7 @@
 
                 <div class="row align-self-end">
                     <form action="{{ path('delete_show') }}" method="POST" style="margin-right: 10px">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}">
                         <input type="hidden" name="show_id" value="{{ show.getId() }}" />
                         <input type="submit" class="btn btn-outline-dark" value="Supprimer"/>
                     </form>

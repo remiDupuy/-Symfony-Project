@@ -54,7 +54,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("/{id}", name="view_category")
      */
     public function viewAction($id) {
         $em = $this->getDoctrine()->getManager();

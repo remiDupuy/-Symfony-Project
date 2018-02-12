@@ -4,13 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
-use AppBundle\Service\FileUploader;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Class ShowController
@@ -104,8 +104,10 @@ class ShowController extends Controller
      * @Route("/delete", name="delete_show")
      * @Method("POST")
      */
-    public function deleteAction(Request $request) {
+    public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager) {
         $doctrine = $this->getDoctrine();
+
+
 
         $id_show = $request->get('show_id');
         if($id_show == null) {
@@ -122,10 +124,17 @@ class ShowController extends Controller
             );
         }
 
-        $doctrine->getManager()->remove($show);
-        $doctrine->getManager()->flush();
+        $csrf = new CsrfToken('delete_show', $request->get('_csrf_tokenw'));
+        if(!$csrfTokenManager->isTokenValid($csrf)) {
 
-        $this->addFlash('success', 'Show has been removed');
+            $this->addFlash('danger', 'The csrf token is not valid.');
+
+        } else {
+            $doctrine->getManager()->remove($show);
+            $doctrine->getManager()->flush();
+
+            $this->addFlash('success', 'Show has been removed');
+        }
 
         return $this->redirectToRoute('list_show');
     }
