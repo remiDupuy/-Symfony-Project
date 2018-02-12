@@ -56,7 +56,7 @@ class ShowUploadListener
 
         // only upload new files
         if ($file instanceof UploadedFile) {
-            $fileName = $this->uploader->upload($file);
+            $fileName = $this->uploader->upload($file, $entity);
             $entity->setPathMainPicture($fileName);
         }
     }

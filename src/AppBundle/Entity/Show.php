@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Model\FileUploaderInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="show")
  */
-class Show
+class Show implements FileUploaderInterface
 {
     public static $IMAGE_DIR = 'uploads/picture_show';
 
@@ -195,7 +196,16 @@ class Show
     }
 
 
+    public function getNameProperty()
+    {
+        return 'pathMainPicture';
+    }
 
-
-
+    /**
+     * @return mixed
+     */
+    public function getBasePath()
+    {
+        return $this->getBasePath().self::$IMAGE_DIR;
+    }
 }
