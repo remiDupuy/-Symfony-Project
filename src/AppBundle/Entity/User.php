@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class User
  * @package AppBundle\Entity
  * @ORM\Entity
- * @ORM\Table
+ * @ORM\Table("`user`")
  */
 class User
 {
@@ -30,6 +30,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $fullname;
 
