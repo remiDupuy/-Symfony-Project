@@ -24,12 +24,12 @@ class ShowController extends Controller
      */
     public function listAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Show');
 
         $sessions = $request->getSession();
 
         if($sessions->has('query_search_value')) {
-            $query = $sessions->has('query_search_value');
+            $query = $sessions->get('query_search_value');
             $shows = $repository->findAllByQuery($query);
 
             $sessions->remove('query_search_value');
@@ -55,7 +55,7 @@ class ShowController extends Controller
     }
 
     /**
-     * @Route("/{id}/update", requirements={"id"="\d+"})
+     * @Route("/{id}/update", requirements={"id"="\d+"}, name="update_show")
      */
     public function updateAction(Request $request, $id) {
         $show = $this->getDoctrine()->getRepository(Show::class)->find($id);
@@ -99,6 +99,37 @@ class ShowController extends Controller
             'show' => $show,
         ]);
     }
+
+    /**
+     * @Route("/delete", name="delete_show")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request) {
+        $doctrine = $this->getDoctrine();
+
+        $id_show = $request->get('show_id');
+        if($id_show == null) {
+            return $this->redirectToRoute('list_show');
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Show');
+
+        $show = $repository->findOneById($id_show);
+
+        if(!$show) {
+            $this->createNotFoundException(
+                'No product to delete for id : '.$id_show
+            );
+        }
+
+        $doctrine->getManager()->remove($show);
+        $doctrine->getManager()->flush();
+
+        $this->addFlash('success', 'Show has been removed');
+
+        return $this->redirectToRoute('list_show');
+    }
+
 
     /**
      * @Route("/create", name="create_show")
