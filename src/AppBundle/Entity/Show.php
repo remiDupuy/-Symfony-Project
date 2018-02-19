@@ -171,6 +171,14 @@ class Show implements FileUploaderInterface
         return $this->path_main_picture;
     }
 
+    public function getPublicThumbnail() {
+        if($this->getId()) {
+            return '/uploads/picture_show/'.$this->getPathMainPicture()->getFilename();
+        }
+
+        return $this->getPathMainPicture();
+    }
+
     /**
      * @param mixed $path_main_picture
      */

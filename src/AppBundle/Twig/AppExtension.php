@@ -16,7 +16,6 @@ class AppExtension extends AbstractExtension
 
     public function joinColumn($array, $column, $delimiter = ',')
     {
-        dump('ok');
         if(!is_array($array))
             return;
 
@@ -24,8 +23,8 @@ class AppExtension extends AbstractExtension
         foreach ($array as $item) {
             $join_array[] = $item->{'get'.ucfirst($column)}();
         }
-        dump($join_array);
-        die;
+
+        return implode(', ', $join_array);
     }
 
     public function getName()

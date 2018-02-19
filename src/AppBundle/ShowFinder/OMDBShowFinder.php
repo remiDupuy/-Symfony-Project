@@ -3,8 +3,12 @@
 namespace AppBundle\ShowFinder;
 
 
+use AppBundle\Entity\Category;
+use AppBundle\Entity\Show;
 use AppBundle\Model\ShowFinderInterface;
 use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class OMDBShowFinder implements ShowFinderInterface
 {
@@ -30,16 +34,33 @@ class OMDBShowFinder implements ShowFinderInterface
             ]
         ]);
 
-        $series = \GuzzleHttp\json_decode($res->getBody(), 1)['Search'];
 
-        foreach ($series as &$serie) {
-            $serie = $this->getShowInfos($serie['imdbID']);
+        $decoded_data = \GuzzleHttp\json_decode($res->getBody(), 1);
+        if(isset($decoded_data['Response']) && $decoded_data['Response'] != 'False') {
+            $series = $decoded_data['Search'];
+        } else {
+            return [];
         }
 
-        dump($series);
-        die;
+        $show_array = [];
+        foreach ($series as &$serie) {
+            $serie = $this->getShowInfos($serie['imdbID']);
+            $show = new Show();
+            $show->setAuthor($serie['Writer']);
+            $show->setName($serie['Title']);
+            $show->setPathMainPicture($serie['Poster']);
+            $show->setPublishedDate($serie['Released']);
+            $show->setIsoCountry($serie['Country']);
+            $categories = explode(',', $serie['Genre']);
+            $categories = array_map(function ($cat) {
+                $cat = trim($cat);
+                return (new Category())->setName($cat);
+            }, $categories);
+            $show->setCategories($categories);
+            $show_array[] = $show;
+        }
 
-        return ;
+        return $show_array;
     }
 
     public function getName()

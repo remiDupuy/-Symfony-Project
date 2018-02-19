@@ -46,10 +46,9 @@ class ShowFinder
     public function searchByName($query) {
         $results = [];
         foreach ($this->getFinders() as $finder) {
-            $results[$finder->getName()] = $finder->findByName($query);
+            $results = $finder->findByName($query);
         }
 
-        dump($results); die;
         return $results;
     }
 

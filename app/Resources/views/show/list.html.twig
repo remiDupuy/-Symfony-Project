@@ -7,14 +7,11 @@
     {% for show in list_shows %}
         <!-- Blog Post -->
         <div class="card mb-4">
-            <img class="card-img-top" src="{{ asset('uploads/picture_show/'~show.getPathMainPicture().filename) }}" alt="Card image cap">
+            <img class="card-img-top" src="{{ show.getPublicThumbnail() }}" alt="Card image cap">
             <div class="card-body">
                 <h2 class="card-title">{{ show.getName() }}</h2>
                 <div class="categories">
-                    {{ joinColumn(show.getCategories, 'name') }}
-                    {% for category in show.getCategories() %}
-                        {{ category.getName() }},
-                    {% endfor %}
+                    {{ joinColumn(show.getCategories(), 'name') }}
                 </div>
             </div>
             <div class="card-footer text-muted d-flex flex-column">
@@ -27,7 +24,7 @@
                         <input type="hidden" name="show_id" value="{{ show.getId() }}" />
                         <input type="submit" class="btn btn-outline-dark" value="Supprimer"/>
                     </form>
-                    <a href="{{ path('update_show', {'id': show.getId()}) }}" class="btn align-self-end btn-outline-dark">Voir</a>
+                    <a href="{% if show.getId() is defined and show.getId() is not empty %}{{ path('update_show', {'id': show.getId()}) }}{% endif %}" class="btn align-self-end btn-outline-dark">Voir</a>
                 </div>
             </div>
         </div>
