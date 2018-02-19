@@ -10,8 +10,10 @@ namespace AppBundle\Entity;
 
 use AppBundle\Model\FileUploaderInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,7 +38,9 @@ class Show implements FileUploaderInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ManyToOne(targetEntity="User", inversedBy="shows")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     *
      * @Assert\NotBlank()
      */
     private $author;
@@ -74,6 +78,7 @@ class Show implements FileUploaderInterface
      * )
      */
     private $categories;
+
 
 
 
@@ -125,9 +130,11 @@ class Show implements FileUploaderInterface
     /**
      * @param mixed $author
      */
-    public function setAuthor($author)
+    public function setAuthor(User $author)
     {
         $this->author = $author;
+
+        return $this;
     }
 
     /**

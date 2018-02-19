@@ -9,7 +9,9 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -49,7 +51,33 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * One Product has Many Features.
+     * @OneToMany(targetEntity="Show", mappedBy="user")
+     */
+    private $shows;
 
+    /**
+     * @return mixed
+     */
+    public function getShows()
+    {
+        return $this->shows;
+    }
+
+    /**
+     * @param mixed $shows
+     */
+    public function setShows($shows)
+    {
+        $this->shows = $shows;
+    }
+
+
+    public function __construct()
+    {
+        $this->shows = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -93,7 +121,7 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return ['ROLE_ADMIN'];
     }
 
     public function getPassword()
@@ -116,5 +144,16 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    public function addShow(Show $show) {
+        if($this->shows->contains($show))
+            return;
+
+        $this->shows->add($show);
+    }
+
+    public function removeShow(Show $show) {
+        $this->shows->remove($show);
     }
 }
