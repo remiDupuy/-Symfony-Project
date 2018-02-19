@@ -1,0 +1,29 @@
+{% extends 'show/base.html.twig' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-warning">
+            {{ error.message }}
+        </div>
+    {% endif %}
+
+    <form action="{{ path('login_check') }}" method="POST" class="form">
+        <div class="form-group">
+            <label for="email" class="control-label required">Email : </label>
+            <input type="text" name="email" id="email" class="form-control required" {% if lastUsername is not null %}value="{{ lastUsername }}" {% endif %}>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="control-label required">Password : </label>
+            <input type="password" name="password" id="password" class="form-control required">
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn" value="Submit" id="submitAction">
+        </div>
+    </form>
+{% endblock %}
