@@ -55,6 +55,9 @@ services:
 
     AppBundle\Security\Authorization\ShowVoter:
             tags: ['security.voter']
+
+    AppBundle\Security\Authorization\UserVoter:
+                tags: ['security.voter']
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:
