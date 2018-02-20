@@ -9,6 +9,7 @@ namespace AppBundle\Type;
 
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -31,7 +32,17 @@ class UserType extends AbstractType {
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ])
+            ->add('roles', TextType::class, ['label' => 'Roles must be sperated by comma'])
             ->add('save', SubmitType::class, array('label' => 'Create user'));
+
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesAsArray) {
+                    return (!empty($rolesAsArray) ? implode(', ', $rolesAsArray) : '');
+                }, function ($rolesAsObject) {
+                    return ($rolesAsObject ? explode(', ', $rolesAsObject) : []);
+            }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
