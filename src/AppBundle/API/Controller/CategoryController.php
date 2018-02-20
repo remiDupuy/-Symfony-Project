@@ -66,4 +66,24 @@ class CategoryController extends Controller
 
         return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
     }
+
+    /**
+     * @Route("/{id}", name="api_post_cat")
+     * @Method("PUT")
+     */
+    public function putAction(Category $category, Request $request, SerializerInterface $serializer, ValidatorInterface $validator) {
+        $newCategory = $serializer->deserialize($request->getContent(), Category::class, 'json');
+
+        $constraintValidationList = $validator->validate($category);
+
+        if($constraintValidationList->count() == 0) {
+            $category->update($newCategory);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new Response('Category created', Response::HTTP_CREATED);
+        }
+
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
+    }
 }

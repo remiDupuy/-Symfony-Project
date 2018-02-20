@@ -58,6 +58,13 @@ class Category
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function setName($name)
     {
         $this->name = $name;
@@ -78,6 +85,10 @@ class Category
     public function setShows($shows)
     {
         $this->shows = $shows;
+    }
+
+    public function update(Category $newCategory) {
+        $this->setName($newCategory->getName());
     }
 }
 
