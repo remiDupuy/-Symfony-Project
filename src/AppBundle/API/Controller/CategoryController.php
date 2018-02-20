@@ -64,7 +64,7 @@ class CategoryController extends Controller
             return new Response('Category created', Response::HTTP_CREATED);
         }
 
-        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -81,9 +81,9 @@ class CategoryController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            return new Response('Category created', Response::HTTP_CREATED);
+            return new Response('Category updated', Response::HTTP_OK);
         }
 
-        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
     }
 }
