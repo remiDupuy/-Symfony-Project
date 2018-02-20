@@ -3,8 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -13,6 +12,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @UniqueEntity("name")
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Category
 {
@@ -22,12 +23,16 @@ class Category
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Expose()
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     *
+     * @Serializer\Expose()
      */
     private $name;
 
@@ -35,6 +40,8 @@ class Category
      * @var \Doctrine\Common\Collections\Collection|Show[]
      *
      * @ORM\ManyToMany(targetEntity="Show", mappedBy="categories")
+     *
+     * @Serializer\Expose()
      */
     private $shows;
 

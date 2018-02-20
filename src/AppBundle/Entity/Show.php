@@ -11,14 +11,15 @@ namespace AppBundle\Entity;
 use AppBundle\Model\FileUploaderInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ShowRepository")
  * @ORM\Table(name="show")
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Show implements FileUploaderInterface
 {
@@ -28,12 +29,16 @@ class Show implements FileUploaderInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Expose()
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
+     *
+     * @Serializer\Expose()
      */
     private $name;
 
@@ -41,19 +46,23 @@ class Show implements FileUploaderInterface
      * @ManyToOne(targetEntity="User", inversedBy="shows")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      *
-     *
+     * @Serializer\Expose()
      */
     private $author;
 
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
+     *
+     * @Serializer\Expose()
      */
     private $published_date;
 
     /**
      * @ORM\Column(type="string", length=2)
      * @Assert\NotBlank()
+     *
+     * @Serializer\Expose()
      */
     private $iso_country;
 
