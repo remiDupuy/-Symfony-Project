@@ -52,6 +52,9 @@ services:
     AppBundle\ShowFinder\OMDBShowFinder:
             tags: ['show.finder']
             arguments: ['%omdb%', '@security.token_storage']
+
+    AppBundle\Security\Authorization\ShowVoter:
+            tags: ['security.voter']
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

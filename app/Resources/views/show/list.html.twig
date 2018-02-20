@@ -18,6 +18,7 @@
                 Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
                 <div>{{ show.getAuthor().getUsername() }}</div>
 
+                {% if is_granted('NOT USED', show) %}
                 <div class="row align-self-end">
                     <form action="{{ path('delete_show') }}" method="POST" style="margin-right: 10px">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}">
@@ -26,6 +27,7 @@
                     </form>
                     <a href="{% if show.getId() is defined and show.getId() is not empty %}{{ path('update_show', {'id': show.getId()}) }}{% endif %}" class="btn align-self-end btn-outline-dark">Voir</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     {% else %}
