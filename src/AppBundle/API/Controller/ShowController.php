@@ -27,6 +27,7 @@ class ShowController extends Controller
 {
     /**
      * @Route("/", name="api_list_show")
+     * @Method("GET")
      */
     public function getAllAction(SerializerInterface $serializer) {
         $shows = $this->getDoctrine()->getRepository(Show::class)->findAll();

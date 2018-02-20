@@ -15,8 +15,11 @@ use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class UserController
@@ -43,5 +46,30 @@ class UserController extends Controller
     public function getAction(User $user, SerializerInterface $serializer) {
         $data = $serializer->serialize($user, 'json');
         return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    /**
+     * @Route("/", name="api_post_user")
+     * @Method("POST")
+     */
+    public function postAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EncoderFactoryInterface $encoder_factory) {
+        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
+
+        $encoder = $encoder_factory->getEncoder($user);
+        $user->setPassword($encoder->encodePassword($user->getPassword(), 'boby'));
+
+        $constraintValidationList = $validator->validate($user);
+
+        if($constraintValidationList->count() == 0) {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($user);
+            $em->flush();
+
+            return new Response('User created', Response::HTTP_CREATED);
+        }
+
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
     }
 }

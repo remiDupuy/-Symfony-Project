@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -32,6 +33,7 @@ class Category
      * @var string
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
+     * @Assert\NotBlank()
      * @Serializer\Expose()
      */
     private $name;
@@ -51,23 +53,11 @@ class Category
         $this->shows = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Category
-     */
     public function setName($name)
     {
         $this->name = $name;
@@ -75,32 +65,19 @@ class Category
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @return mixed
-     */
     public function getShows()
     {
         return $this->shows;
     }
 
-    /**
-     * @param mixed $shows
-     */
     public function setShows($shows)
     {
         $this->shows = $shows;
     }
-
-
 }
 

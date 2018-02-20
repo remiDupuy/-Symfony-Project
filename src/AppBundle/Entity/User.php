@@ -75,21 +75,6 @@ class User implements UserInterface
      */
     private $shows;
 
-    /**
-     * @return mixed
-     */
-    public function getShows()
-    {
-        return $this->shows;
-    }
-
-    /**
-     * @param mixed $shows
-     */
-    public function setShows($shows)
-    {
-        $this->shows = $shows;
-    }
 
 
     public function __construct()
@@ -97,41 +82,36 @@ class User implements UserInterface
         $this->shows = new ArrayCollection();
     }
 
-    /**
-     * @return mixed
-     */
+    public function getShows()
+    {
+        return $this->shows;
+    }
+
+    public function setShows($shows)
+    {
+        $this->shows = $shows;
+    }
+
     public function getEmail()
     {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     */
     public function setEmail($email)
     {
         $this->email = $email;
     }
 
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getFullname()
     {
         return $this->fullname;
     }
 
-    /**
-     * @param mixed $fullname
-     */
     public function setFullname($fullname)
     {
         $this->fullname = $fullname;
@@ -142,9 +122,6 @@ class User implements UserInterface
         return $this->roles;
     }
 
-    /**
-     * @param mixed $roles
-     */
     public function setRoles($roles)
     {
         $this->roles = $roles;
@@ -155,6 +132,14 @@ class User implements UserInterface
         return $this->password;
     }
 
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+
+
+    /* UserInterface methods */
     public function getSalt(){ }
 
     public function getUsername()
@@ -164,14 +149,9 @@ class User implements UserInterface
 
     public function eraseCredentials() { }
 
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
 
+
+    /* One-to-many relationship */
     public function addShow(Show $show) {
         if($this->shows->contains($show))
             return;
