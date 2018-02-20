@@ -51,7 +51,7 @@ services:
 
     AppBundle\ShowFinder\OMDBShowFinder:
             tags: ['show.finder']
-            arguments: ['%omdb%']
+            arguments: ['%omdb%', '@security.token_storage']
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

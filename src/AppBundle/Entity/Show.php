@@ -41,7 +41,7 @@ class Show implements FileUploaderInterface
      * @ManyToOne(targetEntity="User", inversedBy="shows")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      *
-     * @Assert\NotBlank()
+     *
      */
     private $author;
 

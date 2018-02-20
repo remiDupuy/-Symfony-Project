@@ -16,7 +16,7 @@
             </div>
             <div class="card-footer text-muted d-flex flex-column">
                 Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
-                <div>{{ show.getAuthor() }}</div>
+                <div>{{ show.getAuthor().getUsername() }}</div>
 
                 <div class="row align-self-end">
                     <form action="{{ path('delete_show') }}" method="POST" style="margin-right: 10px">

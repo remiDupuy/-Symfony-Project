@@ -152,6 +152,7 @@ class ShowController extends Controller
 
         $form->handleRequest($request);
 
+        $show->setAuthor($this->getUser());
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
