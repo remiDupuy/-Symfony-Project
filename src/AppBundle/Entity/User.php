@@ -71,7 +71,7 @@ class User implements UserInterface
 
     /**
      * One Product has Many Features.
-     * @OneToMany(targetEntity="Show", mappedBy="user")
+     * @OneToMany(targetEntity="Show", mappedBy="author")
      */
     private $shows;
 
@@ -161,5 +161,12 @@ class User implements UserInterface
 
     public function removeShow(Show $show) {
         $this->shows->remove($show);
+    }
+
+    public function update(User $newCategory) {
+        $this->setEmail($newCategory->getEmail());
+        $this->setFullname($newCategory->getFullname());
+        $this->setRoles($newCategory->getRoles());
+        $this->setShows($newCategory->getShows());
     }
 }

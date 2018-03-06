@@ -72,4 +72,24 @@ class UserController extends Controller
 
         return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_CREATED);
     }
+
+    /**
+     * @Route("/{id}", name="api_put_user")
+     * @Method("PUT")
+     */
+    public function putAction(User $user, Request $request, SerializerInterface $serializer, ValidatorInterface $validator) {
+        $newUser = $serializer->deserialize($request->getContent(), User::class, 'json');
+
+        $constraintValidationList = $validator->validate($user);
+
+        if($constraintValidationList->count() == 0) {
+            $user->update($newUser);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new Response('User updated', Response::HTTP_OK);
+        }
+
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
+    }
 }

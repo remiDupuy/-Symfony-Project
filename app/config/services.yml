@@ -3,6 +3,7 @@
 parameters:
     picture_show_directory: '%kernel.project_dir%/web/uploads/picture_show'
     omdb_endpoint: http://www.omdbapi.com/?i=tt3896198&apikey=118f043f
+    app_bundle.serializer_subscriber.class: AppBundle\EventListener\ShowDeserializeEventListener
 
 
 services:
@@ -44,6 +45,12 @@ services:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
                 - { name: doctrine.event_listener, event: postLoad }
+
+    AppBundle\EventListener\ShowDeserializeEventListener:
+        class: %app_bundle.serializer_subscriber.class%
+        tags:
+            - { name: jms_serializer.event_subscriber }
+        arguments: ['@doctrine.orm.entity_manager']
 
     AppBundle\ShowFinder\DbShowFinder:
             tags: ['show.finder']

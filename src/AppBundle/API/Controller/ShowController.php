@@ -15,8 +15,10 @@ use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ShowController
@@ -44,5 +46,27 @@ class ShowController extends Controller
 
         $data = $serializer->serialize($show, 'json');
         return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * @Route("/{id}", name="api_put_show")
+     * @Method("PUT")
+     */
+    public function putAction(Show $show, Request $request, SerializerInterface $serializer, ValidatorInterface $validator) {
+        $newShow = $serializer->deserialize($request->getContent(), Show::class, 'json');
+        dump($newShow); die;
+
+        $constraintValidationList = $validator->validate($show);
+
+        if($constraintValidationList->count() == 0) {
+            $show->update($newShow);
+            dump($show); die;
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new Response('Show updated', Response::HTTP_OK);
+        }
+
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
     }
 }

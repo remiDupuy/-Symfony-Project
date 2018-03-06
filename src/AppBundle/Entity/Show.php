@@ -174,4 +174,13 @@ class Show
     {
         $this->categories = $categories;
     }
+
+    public function update(Show $newShow) {
+        $this->setName($newShow->getName());
+        $this->setAuthor($newShow->getAuthor());
+        $this->setCategories($newShow->getCategories());
+        $this->setIsoCountry($newShow->getIsoCountry());
+        $this->setPublishedDate($newShow->getPublishedDate());
+        $this->setPathMainPicture($newShow->getPathMainPicture());
+    }
 }
