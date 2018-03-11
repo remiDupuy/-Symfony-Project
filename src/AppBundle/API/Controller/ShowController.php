@@ -70,4 +70,21 @@ class ShowController extends Controller
 
         return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
     }
+
+    /**
+     * @Route("/{id}", name="api_delete_show")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Show $show) {
+
+        if($show) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($show);
+            $em->flush();
+
+            return new Response('Show deleted', Response::HTTP_OK);
+        }
+
+        return new Response('Couldn\'t be deleted', Response::HTTP_BAD_REQUEST);
+    }
 }

@@ -86,4 +86,21 @@ class CategoryController extends Controller
 
         return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
     }
+
+    /**
+     * @Route("/{id}", name="api_delete_cat")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Category $category) {
+
+        if($category) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($category);
+            $em->flush();
+
+            return new Response('Category deleted', Response::HTTP_OK);
+        }
+
+        return new Response('Couldn\'t be deleted', Response::HTTP_BAD_REQUEST);
+    }
 }

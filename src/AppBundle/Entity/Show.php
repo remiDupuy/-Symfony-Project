@@ -50,7 +50,7 @@ class Show
     private $author;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
      * @Assert\DateTime()
      *

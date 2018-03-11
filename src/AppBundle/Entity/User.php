@@ -71,7 +71,8 @@ class User implements UserInterface
 
     /**
      * One Product has Many Features.
-     * @OneToMany(targetEntity="Show", mappedBy="author")
+     * @OneToMany(targetEntity="Show", mappedBy="author", cascade={"remove"})
+     *
      */
     private $shows;
 
