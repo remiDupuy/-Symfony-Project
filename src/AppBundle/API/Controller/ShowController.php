@@ -53,14 +53,15 @@ class ShowController extends Controller
      * @Method("PUT")
      */
     public function putAction(Show $show, Request $request, SerializerInterface $serializer, ValidatorInterface $validator) {
-        $newShow = $serializer->deserialize($request->getContent(), Show::class, 'json');
-        dump($newShow); die;
+        // I tried to use events with  JMS Serializer (cf.. ShowDeserializerEventListener) but doesn't work
+        //$newShow = $serializer->deserialize($request->getContent(), Show::class, 'json');
+
+        $show_array = json_decode($request->getContent(), 1);
+        $show->parseFromArray($show_array, $this->getDoctrine()->getManager());
 
         $constraintValidationList = $validator->validate($show);
 
         if($constraintValidationList->count() == 0) {
-            $show->update($newShow);
-            dump($show); die;
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 

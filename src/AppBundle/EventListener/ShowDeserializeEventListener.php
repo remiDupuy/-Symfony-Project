@@ -35,7 +35,5 @@ class ShowDeserializeEventListener implements EventSubscriberInterface
         }
 
         $event->setData($data);
-
-        return $event;
     }
 }

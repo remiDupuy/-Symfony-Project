@@ -45,6 +45,7 @@ services:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
                 - { name: doctrine.event_listener, event: postLoad }
+            arguments: ["@router"]
 
     AppBundle\EventListener\ShowDeserializeEventListener:
         class: %app_bundle.serializer_subscriber.class%

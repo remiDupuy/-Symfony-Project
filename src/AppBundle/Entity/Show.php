@@ -50,8 +50,9 @@ class Show
     private $author;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
+     * @Assert\DateTime()
      *
      * @Serializer\Expose()
      */
@@ -67,7 +68,7 @@ class Show
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\File(mimeTypes={ "image/jpeg" })
+     * @Assert\File(mimeTypes={ "image/jpeg" }, groups={"creation"})
      */
     private $path_main_picture;
 
@@ -182,5 +183,22 @@ class Show
         $this->setIsoCountry($newShow->getIsoCountry());
         $this->setPublishedDate($newShow->getPublishedDate());
         $this->setPathMainPicture($newShow->getPathMainPicture());
+    }
+
+    public function parseFromArray($show_array, $em)
+    {
+        isset($show_array['name']) && $show_array['name'] ? $this->setName($show_array['name']) : null;
+
+
+        if (isset($show_array['author']) && $show_array['author']) {
+            $user = $em->getRepository(User::class)->find((int)$show_array['author']);
+            if($user)
+                $this->setAuthor($user);
+        }
+
+        isset($show_array['categories']) && $show_array['categories'] ? $this->setCategories($show_array['categories']) : null;
+        isset($show_array['iso_country']) && $show_array['iso_country'] ? $this->setIsoCountry($show_array['iso_country']) : null;
+        isset($show_array['published_date']) && $show_array['published_date'] ? $this->setPublishedDate($show_array['published_date']) : null;
+        isset($show_array['path_main_picture']) && $show_array['path_main_picture'] ? $this->setPathMainPicture($show_array['path_main_picture']) : null;
     }
 }
