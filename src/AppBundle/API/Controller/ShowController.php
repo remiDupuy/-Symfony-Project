@@ -49,6 +49,29 @@ class ShowController extends Controller
     }
 
     /**
+     * @Route("/", name="api_post_show")
+     * @Method("POST")
+     */
+    public function postAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator) {
+
+        $show_array = json_decode($request->getContent(), 1);
+        $show = new Show();
+        $show->parseFromArray($show_array, $this->getDoctrine()->getManager());
+
+        $constraintValidationList = $validator->validate($show);
+
+        if($constraintValidationList->count() == 0) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($show);
+            $em->flush();
+
+            return new Response('Show created', Response::HTTP_OK);
+        }
+
+        return new Response($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
      * @Route("/{id}", name="api_put_show")
      * @Method("PUT")
      */

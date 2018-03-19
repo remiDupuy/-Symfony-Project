@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping\ManyToOne;
+use phpDocumentor\Reflection\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -43,7 +44,7 @@ class Show
 
     /**
      * @ManyToOne(targetEntity="User", inversedBy="shows")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
      * @Serializer\Expose()
      */
@@ -160,7 +161,10 @@ class Show
 
     public function getPublicThumbnail() {
         if($this->getId()) {
-            return '/uploads/picture_show/'.$this->getPathMainPicture()->getFilename();
+            if($this->getPathMainPicture() instanceof \Symfony\Component\HttpFoundation\File\File)
+                return '/uploads/picture_show/'.$this->getPathMainPicture()->getFilename();
+            else
+                return $this->getPathMainPicture();
         }
 
         return $this->getPathMainPicture();
@@ -198,7 +202,7 @@ class Show
 
         isset($show_array['categories']) && $show_array['categories'] ? $this->setCategories($show_array['categories']) : null;
         isset($show_array['iso_country']) && $show_array['iso_country'] ? $this->setIsoCountry($show_array['iso_country']) : null;
-        isset($show_array['published_date']) && $show_array['published_date'] ? $this->setPublishedDate($show_array['published_date']) : null;
+        isset($show_array['published_date']) && $show_array['published_date'] ? $this->setPublishedDate(new \DateTime($show_array['published_date'])) : null;
         isset($show_array['path_main_picture']) && $show_array['path_main_picture'] ? $this->setPathMainPicture($show_array['path_main_picture']) : null;
     }
 }

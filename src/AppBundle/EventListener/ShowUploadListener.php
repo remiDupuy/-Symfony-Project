@@ -49,7 +49,10 @@ class ShowUploadListener
 
         if ($fileName = $entity->getPathMainPicture()) {
 
-            $entity->setPathMainPicture(new File($this->uploader->getTargetDir().'/'.$fileName));
+            if(strpos($fileName, 'http') === false)
+                $entity->setPathMainPicture(new File($this->uploader->getTargetDir().'/'.$fileName));
+            else
+                $entity->setPathMainPicture($fileName);
         }
     }
 
