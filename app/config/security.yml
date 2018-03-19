@@ -30,7 +30,11 @@ security:
 
         api:
             pattern: ^/api
-            anonymous: ~
+            stateless: true
+            provider: database
+            guard:
+              authenticators:
+                - AppBundle\Security\Authentication\ApiUserPasswordAuthentication
 
         secured_area:
             pattern: ^/

@@ -67,6 +67,10 @@ services:
 
     AppBundle\Security\Authorization\UserVoter:
                 tags: ['security.voter']
+
+    AppBundle\Security\Authentication\ApiUserPasswordAuthentication:
+        arguments:
+          $encoderFactory: '@security.encoder_factory.generic'
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:
