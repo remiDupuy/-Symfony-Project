@@ -16,12 +16,10 @@ class OMDBShowFinder implements ShowFinderInterface
     private $params_omdb;
     private $client;
 
-    public function __construct($params_omdb, TokenStorage $tokenStorage)
+    public function __construct(Client $client, $params_omdb, TokenStorage $tokenStorage)
     {
         $this->params_omdb= $params_omdb;
-        $this->client = new Client([
-            'base_uri' => $this->params_omdb['endpoint'],
-        ]);
+        $this->client = $client;
         $this->tokenStorage = $tokenStorage;
     }
 
