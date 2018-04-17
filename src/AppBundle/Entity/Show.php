@@ -193,13 +193,6 @@ class Show
     {
         isset($show_array['name']) && $show_array['name'] ? $this->setName($show_array['name']) : null;
 
-
-        if (isset($show_array['author']) && $show_array['author']) {
-            $user = $em->getRepository(User::class)->find((int)$show_array['author']);
-            if($user)
-                $this->setAuthor($user);
-        }
-
         isset($show_array['categories']) && $show_array['categories'] ? $this->setCategories($show_array['categories']) : null;
         isset($show_array['iso_country']) && $show_array['iso_country'] ? $this->setIsoCountry($show_array['iso_country']) : null;
         isset($show_array['published_date']) && $show_array['published_date'] ? $this->setPublishedDate(new \DateTime($show_array['published_date'])) : null;

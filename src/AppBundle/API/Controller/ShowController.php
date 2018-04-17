@@ -57,6 +57,7 @@ class ShowController extends Controller
         $show_array = json_decode($request->getContent(), 1);
         $show = new Show();
         $show->parseFromArray($show_array, $this->getDoctrine()->getManager());
+        $show->setAuthor($this->getUser());
 
         $constraintValidationList = $validator->validate($show);
 
@@ -81,6 +82,8 @@ class ShowController extends Controller
 
         $show_array = json_decode($request->getContent(), 1);
         $show->parseFromArray($show_array, $this->getDoctrine()->getManager());
+        $show->setAuthor($this->getUser());
+
 
         $constraintValidationList = $validator->validate($show);
 
