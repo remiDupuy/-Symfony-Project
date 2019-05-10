@@ -9,18 +9,18 @@ use AppBundle\Model\ShowFinderInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class OMDBShowFinder implements ShowFinderInterface
 {
     private $params_omdb;
     private $client;
 
-    public function __construct($params_omdb)
+    public function __construct(Client $client, $params_omdb, TokenStorage $tokenStorage)
     {
         $this->params_omdb= $params_omdb;
-        $this->client = new Client([
-            'base_uri' => $this->params_omdb['endpoint'],
-        ]);
+        $this->client = $client;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function findByName($query)
@@ -46,7 +46,7 @@ class OMDBShowFinder implements ShowFinderInterface
         foreach ($series as &$serie) {
             $serie = $this->getShowInfos($serie['imdbID']);
             $show = new Show();
-            $show->setAuthor($serie['Writer']);
+            $show->setAuthor($this->tokenStorage->getToken()->getUser());
             $show->setName($serie['Title']);
             $show->setPathMainPicture($serie['Poster']);
             $show->setPublishedDate($serie['Released']);

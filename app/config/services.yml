@@ -2,7 +2,9 @@
 # https://symfony.com/doc/current/service_container.html
 parameters:
     picture_show_directory: '%kernel.project_dir%/web/uploads/picture_show'
+    picture_show_directory_public: '/web/uploads/picture_show'
     omdb_endpoint: http://www.omdbapi.com/?i=tt3896198&apikey=118f043f
+    app_bundle.serializer_subscriber.class: AppBundle\EventListener\ShowDeserializeEventListener
 
 
 services:
@@ -44,6 +46,13 @@ services:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
                 - { name: doctrine.event_listener, event: postLoad }
+            arguments: ["@router"]
+
+    AppBundle\EventListener\ShowDeserializeEventListener:
+        class: %app_bundle.serializer_subscriber.class%
+        tags:
+            - { name: jms_serializer.event_subscriber }
+        arguments: ['@doctrine.orm.entity_manager']
 
     AppBundle\ShowFinder\DbShowFinder:
             tags: ['show.finder']
@@ -51,7 +60,17 @@ services:
 
     AppBundle\ShowFinder\OMDBShowFinder:
             tags: ['show.finder']
-            arguments: ['%omdb%']
+            arguments: ['%omdb%', '@security.token_storage']
+
+    AppBundle\Security\Authorization\ShowVoter:
+            tags: ['security.voter']
+
+    AppBundle\Security\Authorization\UserVoter:
+                tags: ['security.voter']
+
+    AppBundle\Security\Authentication\ApiUserPasswordAuthentication:
+        arguments:
+          $encoderFactory: '@security.encoder_factory.generic'
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

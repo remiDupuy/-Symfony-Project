@@ -1,0 +1,22 @@
+{% extends "show/base.html.twig" %}
+
+{% block title %}List of users{% endblock %}
+
+{% block content %}
+
+   <table class="table">
+       <thead>
+        <th>Email</th>
+        <th>Name</th>
+       </thead>
+       <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.getEmail() }}</td>
+                    <td>{{ user.getFullName() }}</td>
+                </tr>
+            {% endfor %}
+       </tbody>
+   </table>
+
+{% endblock %}

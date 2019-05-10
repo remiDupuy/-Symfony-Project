@@ -7,6 +7,7 @@
     {% for show in list_shows %}
         <!-- Blog Post -->
         <div class="card mb-4">
+
             <img class="card-img-top" src="{{ show.getPublicThumbnail() }}" alt="Card image cap">
             <div class="card-body">
                 <h2 class="card-title">{{ show.getName() }}</h2>
@@ -16,8 +17,9 @@
             </div>
             <div class="card-footer text-muted d-flex flex-column">
                 Published on {{ show.getPublishedDate()|date('d/m/Y') }} by
-                <div>{{ show.getAuthor() }}</div>
+                <div>{{ show.getAuthor().getUsername() }}</div>
 
+                {% if is_granted('NOT USED', show) %}
                 <div class="row align-self-end">
                     <form action="{{ path('delete_show') }}" method="POST" style="margin-right: 10px">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}">
@@ -26,6 +28,7 @@
                     </form>
                     <a href="{% if show.getId() is defined and show.getId() is not empty %}{{ path('update_show', {'id': show.getId()}) }}{% endif %}" class="btn align-self-end btn-outline-dark">Voir</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     {% else %}

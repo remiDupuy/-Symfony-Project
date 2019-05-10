@@ -3,9 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -13,6 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @UniqueEntity("name")
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Category
 {
@@ -22,12 +24,17 @@ class Category
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Expose()
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     *
+     * @Assert\NotBlank()
+     * @Serializer\Expose()
      */
     private $name;
 
@@ -35,6 +42,8 @@ class Category
      * @var \Doctrine\Common\Collections\Collection|Show[]
      *
      * @ORM\ManyToMany(targetEntity="Show", mappedBy="categories")
+     *
+     * @Serializer\Expose()
      */
     private $shows;
 
@@ -44,23 +53,18 @@ class Category
         $this->shows = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Category
-     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function setName($name)
     {
         $this->name = $name;
@@ -68,32 +72,23 @@ class Category
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @return mixed
-     */
     public function getShows()
     {
         return $this->shows;
     }
 
-    /**
-     * @param mixed $shows
-     */
     public function setShows($shows)
     {
         $this->shows = $shows;
     }
 
-
+    public function update(Category $newCategory) {
+        $this->setName($newCategory->getName());
+    }
 }
 

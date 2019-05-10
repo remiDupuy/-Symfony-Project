@@ -24,7 +24,6 @@ class ShowType extends AbstractType {
     {
 
         $builder->add('name', TextType::class)
-            ->add('author', TextType::class)
             ->add('published_date', DateType::class)
             ->add('iso_country', CountryType::class)
             ->add('path_main_picture', FileType::class, ['required' => false])

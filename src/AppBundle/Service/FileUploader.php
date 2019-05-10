@@ -13,11 +13,10 @@ class FileUploader
         $this->targetDir = $targetDir;
     }
 
-    public function upload(UploadedFile $file, FileUploaderInterface $object)
+    public function upload(UploadedFile $file)
     {
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-        //$this->deleteFile($object);
         $file->move($this->getTargetDir(), $fileName);
 
 
@@ -27,15 +26,5 @@ class FileUploader
     public function getTargetDir()
     {
         return $this->targetDir;
-    }
-
-
-    public function deleteFile(FileUploaderInterface $object) {
-        $property_name = $object->getNameProperty();
-
-        echo $object->getBasePath();
-        echo $object->{'get'.ucfirst($property_name)}();
-        die;
-        @unlink($object->getBasePath().$object->{$property_name});
     }
 }

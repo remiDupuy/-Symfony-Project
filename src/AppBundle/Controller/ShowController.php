@@ -147,11 +147,12 @@ class ShowController extends Controller
     public function createAction(Request $request) {
 
         $show = new Show();
-        $form = $this->createForm(ShowType::class, $show);
+        $form = $this->createForm(ShowType::class, $show, ['validation_groups' => 'creation']);
 
 
         $form->handleRequest($request);
 
+        $show->setAuthor($this->getUser());
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
